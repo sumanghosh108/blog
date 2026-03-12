@@ -72,7 +72,7 @@ const postCount = filteredPosts.length;
       <nav class="mb-6" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
           <li>
-            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <a href={import.meta.env.BASE_URL} class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Home
             </a>
           </li>
@@ -82,7 +82,7 @@ const postCount = filteredPosts.length;
             </svg>
           </li>
           <li>
-            <a href="/tags" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <a href={`${import.meta.env.BASE_URL}tags`} class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Tags
             </a>
           </li>
@@ -133,7 +133,7 @@ const postCount = filteredPosts.length;
           No posts found with this tag.
         </p>
         <a
-          href="/tags"
+          href={`${import.meta.env.BASE_URL}tags`}
           class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
         >
           Browse all tags
@@ -147,7 +147,7 @@ const postCount = filteredPosts.length;
     <!-- Navigation Links -->
     <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
       <a
-        href="/tags"
+        href={`${import.meta.env.BASE_URL}tags`}
         class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
       >
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -157,7 +157,7 @@ const postCount = filteredPosts.length;
       </a>
       
       <a
-        href="/"
+        href={import.meta.env.BASE_URL}
         class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
       >
         Back to Home
