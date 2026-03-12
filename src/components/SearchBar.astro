@@ -65,6 +65,9 @@ const searchData = allPosts.map(post => ({
 </div>
 
 <script define:vars={{ searchData }}>
+  // Get base URL from environment
+  const baseUrl = import.meta.env.BASE_URL;
+  
   // Import Fuse.js dynamically
   import('fuse.js').then(({ default: Fuse }) => {
     const searchInput = document.getElementById('search-input');
@@ -122,7 +125,7 @@ const searchData = allPosts.map(post => ({
 
           return `
             <a
-              href="/blog/${post.slug}"
+              href="${baseUrl}blog/${post.slug}"
               class="search-result-item block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0 ${
                 index === selectedIndex ? 'bg-gray-50 dark:bg-gray-700' : ''
               }"
@@ -231,7 +234,7 @@ const searchData = allPosts.map(post => ({
           e.preventDefault();
           if (selectedIndex >= 0 && currentResults[selectedIndex]) {
             const post = currentResults[selectedIndex].item;
-            window.location.href = `/blog/${post.slug}`;
+            window.location.href = `${baseUrl}blog/${post.slug}`;
           }
           break;
         
