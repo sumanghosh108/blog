@@ -1,6 +1,6 @@
 # GitHub Pages Deployment Guide
 
-This document explains how the Astro Developer Blog is deployed to GitHub Pages with a custom domain.
+This document explains how the Suman Developer Blog is deployed to GitHub Pages with a custom domain.
 
 ## Overview
 

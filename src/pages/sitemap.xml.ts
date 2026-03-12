@@ -1,5 +1,5 @@
 /**
- * Sitemap Generator for Astro Developer Blog
+ * Sitemap Generator for Suman Developer Blog
  * 
  * Generates an XML sitemap for search engines with all blog posts and static pages.
  * 

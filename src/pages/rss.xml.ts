@@ -1,5 +1,5 @@
 /**
- * RSS Feed Generator for Astro Developer Blog
+ * RSS Feed Generator for Suman Developer Blog
  * 
  * Generates an RSS 2.0 feed with all published blog posts for subscribers.
  * 

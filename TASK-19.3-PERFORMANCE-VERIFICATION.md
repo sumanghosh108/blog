@@ -113,7 +113,7 @@ Created comprehensive performance analysis tools and reports:
 
 ## Conclusion
 
-The Astro Developer Blog demonstrates **excellent performance characteristics** that strongly indicate it will meet or exceed the required Lighthouse performance score of ≥95:
+The Suman Developer Blog demonstrates **excellent performance characteristics** that strongly indicate it will meet or exceed the required Lighthouse performance score of ≥95:
 
 - **Zero JavaScript** - Exceptional for performance
 - **Minimal CSS** - Well-optimized

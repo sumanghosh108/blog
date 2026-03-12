@@ -1,4 +1,4 @@
-# Astro Developer Blog
+# Suman Developer Blog
 
 A production-grade developer blog built with Astro and Markdown, designed for deployment on GitHub Pages.
 

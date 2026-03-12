@@ -1,6 +1,6 @@
 # GitHub Pages Deployment Checklist
 
-Quick checklist for deploying the Astro Developer Blog to GitHub Pages with custom domain `blog.sumannaba.in`.
+Quick checklist for deploying the Suman Developer Blog to GitHub Pages with custom domain `blog.sumannaba.in`.
 
 ## ✅ Code Configuration (Already Complete)
 

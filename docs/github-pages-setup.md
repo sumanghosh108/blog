@@ -1,6 +1,6 @@
 # GitHub Pages Setup Instructions
 
-This document provides step-by-step instructions for configuring your GitHub repository to deploy the Astro Developer Blog to GitHub Pages with the custom domain `blog.sumannaba.in`.
+This document provides step-by-step instructions for configuring your GitHub repository to deploy the Suman Developer Blog to GitHub Pages with the custom domain `blog.sumannaba.in`.
 
 ## Prerequisites
 

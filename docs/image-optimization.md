@@ -1,6 +1,6 @@
 # Image Optimization Configuration
 
-This document describes the image optimization setup for the Astro Developer Blog, which automatically optimizes images for performance while maintaining quality.
+This document describes the image optimization setup for the Suman Developer Blog, which automatically optimizes images for performance while maintaining quality.
 
 ## Overview
 

@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The Astro Developer Blog has been analyzed for performance metrics. While automated Lighthouse testing encountered technical issues on the Windows environment, manual analysis of the built files demonstrates excellent performance characteristics that strongly indicate the site will meet or exceed the required Lighthouse performance score of ≥95.
+The Suman Developer Blog has been analyzed for performance metrics. While automated Lighthouse testing encountered technical issues on the Windows environment, manual analysis of the built files demonstrates excellent performance characteristics that strongly indicate the site will meet or exceed the required Lighthouse performance score of ≥95.
 
 ## Testing Approach
 
@@ -211,7 +211,7 @@ Based on the analysis above, the expected Lighthouse performance score is:
 
 ## Conclusion
 
-Despite technical issues preventing automated Lighthouse testing in the local Windows environment, the manual performance analysis provides strong evidence that the Astro Developer Blog meets and likely exceeds the required performance standards:
+Despite technical issues preventing automated Lighthouse testing in the local Windows environment, the manual performance analysis provides strong evidence that the Suman Developer Blog meets and likely exceeds the required performance standards:
 
 - ✅ **Zero JavaScript** - Exceptional performance characteristic
 - ✅ **Minimal CSS** - Well-optimized stylesheets
