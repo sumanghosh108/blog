@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
+  <!-- Background -->
+  <rect width="300" height="80" fill="#1a1a1a" rx="4"/>
+  
+  <!-- Red dragon accent (simplified geometric design) -->
+  <g fill="#dc2626">
+    <circle cx="30" cy="40" r="15"/>
+    <path d="M 35 35 L 45 30 L 40 40 Z"/>
+    <path d="M 35 45 L 45 50 L 40 40 Z"/>
+  </g>
+  
+  <!-- Text: SUMAN ANALYST HL NADA -->
+  <text x="60" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">
+    SUMAN ANALYST
+  </text>
+  <text x="60" y="55" font-family="Arial, sans-serif" font-size="14" fill="#e5e5e5">
+    HL NADA
+  </text>
+</svg>

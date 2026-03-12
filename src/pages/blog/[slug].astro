@@ -1,0 +1,103 @@
+---
+/**
+ * Dynamic blog post page
+ * Renders individual blog posts with full content and features
+ * 
+ * Validates Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 11.4
+ */
+
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import PostCard from '../../components/PostCard.astro';
+
+// Generate static paths for all blog posts
+export async function getStaticPaths() {
+  // Fetch all blog posts from content collection
+  const allPosts = await getCollection('blog');
+  
+  // Filter out draft posts in production
+  const publishedPosts = allPosts.filter(post => {
+    // In development, show all posts; in production, hide drafts
+    return import.meta.env.DEV || !post.data.draft;
+  });
+  
+  // Generate a path for each post
+  return publishedPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+// Get the post from props
+const { post } = Astro.props;
+
+// Render the post content and extract headings
+const { Content, headings } = await post.render();
+
+// Get all posts for related posts calculation
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts.filter(p => {
+  return (import.meta.env.DEV || !p.data.draft) && p.slug !== post.slug;
+});
+
+// Find related posts (posts sharing at least one tag)
+const relatedPosts = publishedPosts
+  .filter(p => {
+    // Check if this post shares any tags with the current post
+    return p.data.tags.some(tag => post.data.tags.includes(tag));
+  })
+  .sort((a, b) => {
+    // Sort by number of shared tags (descending)
+    const aSharedTags = a.data.tags.filter(tag => post.data.tags.includes(tag)).length;
+    const bSharedTags = b.data.tags.filter(tag => post.data.tags.includes(tag)).length;
+    return bSharedTags - aSharedTags;
+  })
+  .slice(0, 3); // Limit to 3 related posts
+
+// Extract post metadata
+const { title, description, publishDate, author, tags, image } = post.data;
+---
+
+<BlogLayout
+  title={title}
+  description={description}
+  publishDate={publishDate}
+  author={author}
+  tags={tags}
+  image={image}
+  headings={headings}
+  content={post.body}
+>
+  <!-- Render the blog post content -->
+  <Content />
+  
+  <!-- Share Buttons Section -->
+  <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+      Share this post
+    </h2>
+    <ShareButtons title={title} url={Astro.url.toString()} />
+  </div>
+  
+  <!-- Related Posts Section -->
+  {relatedPosts.length > 0 && (
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+        Related Posts
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {relatedPosts.map((relatedPost) => (
+          <PostCard
+            slug={relatedPost.slug}
+            title={relatedPost.data.title}
+            description={relatedPost.data.description}
+            publishDate={relatedPost.data.publishDate}
+            tags={relatedPost.data.tags}
+            image={relatedPost.data.image}
+          />
+        ))}
+      </div>
+    </div>
+  )}
+</BlogLayout>

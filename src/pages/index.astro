@@ -1,0 +1,132 @@
+---
+/**
+ * Homepage - Main landing page for the blog
+ * Displays featured post, recent posts, and author introduction
+ * 
+ * Validates Requirements: 2.1, 2.2, 2.3, 2.4, 5.2, 5.3
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+// Fetch all blog posts from content collection
+const allPosts = await getCollection('blog');
+
+// Filter out draft posts and sort by publishDate (newest first)
+const publishedPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+// Find featured post if available
+const featuredPost = publishedPosts.find(post => post.data.featured);
+
+// Get recent posts (excluding featured post if it exists)
+const recentPosts = featuredPost 
+  ? publishedPosts.filter(post => post.slug !== featuredPost.slug).slice(0, 6)
+  : publishedPosts.slice(0, 6);
+
+// Author information
+const authorName = "Suman Ghosh";
+const authorTopics = [
+  "Machine Learning",
+  "AI Agents", 
+  "Data Science",
+  "DevOps",
+  "Python",
+  "Cloud & AWS",
+  "MLOps"
+];
+---
+
+<BaseLayout 
+  title="Suman's Developer Blog" 
+  description="A blog about Machine Learning, AI Agents, Data Science, DevOps, Python, Cloud & AWS, and MLOps"
+>
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Hero Section with Author Introduction -->
+    <section class="mb-12 text-center">
+      <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        Welcome to Suman's Blog
+      </h1>
+      
+      <!-- Author Introduction -->
+      <div class="max-w-3xl mx-auto">
+        <p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
+          Hi, I'm <span class="font-semibold text-gray-900 dark:text-white">{authorName}</span>. 
+          I write about technical topics and share insights from my experience in software development and data science.
+        </p>
+        
+        <!-- Author Topics -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+          {authorTopics.map((topic) => (
+            <span class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-4 py-2 text-sm font-medium text-blue-700 dark:text-blue-400">
+              {topic}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Post Section -->
+    {featuredPost && (
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          Featured Post
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <PostCard
+            slug={featuredPost.slug}
+            title={featuredPost.data.title}
+            description={featuredPost.data.description}
+            publishDate={featuredPost.data.publishDate}
+            tags={featuredPost.data.tags}
+            image={featuredPost.data.image}
+            featured={true}
+          />
+        </div>
+      </section>
+    )}
+
+    <!-- Recent Posts Section -->
+    <section>
+      <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        Recent Posts
+      </h2>
+      
+      {recentPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recentPosts.map((post) => (
+            <PostCard
+              slug={post.slug}
+              title={post.data.title}
+              description={post.data.description}
+              publishDate={post.data.publishDate}
+              tags={post.data.tags}
+              image={post.data.image}
+              featured={false}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-gray-600 dark:text-gray-400 text-center py-8">
+          No posts available yet. Check back soon!
+        </p>
+      )}
+    </section>
+
+    <!-- Call to Action -->
+    {publishedPosts.length > 6 && (
+      <div class="mt-12 text-center">
+        <a
+          href="/blog"
+          class="inline-flex items-center justify-center rounded-lg bg-blue-600 dark:bg-blue-500 px-6 py-3 text-base font-semibold text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg hover:shadow-xl"
+        >
+          View All Posts
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    )}
+  </div>
+</BaseLayout>

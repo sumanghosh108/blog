@@ -1,0 +1,159 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "type": "HTML",
+      "file": "about\\index.html",
+      "size": 158405,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "blog\\building-ai-agents-locally\\index.html",
+      "size": 309596,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "blog\\fastapi-aws-deployment\\index.html",
+      "size": 212767,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "blog\\index.html",
+      "size": 163045,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "blog\\yolov8-brain-tumor-detection\\index.html",
+      "size": 286253,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "index.html",
+      "size": 164741,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\ai-agents\\index.html",
+      "size": 159249,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\cloud-&-aws\\index.html",
+      "size": 159609,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\computer-vision\\index.html",
+      "size": 160324,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\devops\\index.html",
+      "size": 159486,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\healthcare-ai\\index.html",
+      "size": 160294,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\index.html",
+      "size": 164388,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\machine-learning\\index.html",
+      "size": 162677,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "HTML",
+      "file": "tags\\python\\index.html",
+      "size": 159486,
+      "threshold": 51200,
+      "passed": false
+    },
+    {
+      "type": "CSS",
+      "file": "_astro\\about.GuOsAfc3.css",
+      "size": 43547,
+      "threshold": 102400,
+      "passed": true
+    },
+    {
+      "type": "CSS",
+      "file": "_astro\\_slug_.g90Lg1Ll.css",
+      "size": 44182,
+      "threshold": 102400,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "images\\ai-agents-local.jpg",
+      "size": 31811,
+      "threshold": 512000,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "images\\fastapi-aws.jpg",
+      "size": 29981,
+      "threshold": 512000,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "images\\yolov8-brain-tumor.jpg",
+      "size": 34566,
+      "threshold": 512000,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "images\\yolov8-brain-tumor.webp",
+      "size": 11870,
+      "threshold": 512000,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "logo.png",
+      "size": 53336,
+      "threshold": 512000,
+      "passed": true
+    },
+    {
+      "type": "Image",
+      "file": "logo.svg",
+      "size": 682,
+      "threshold": 512000,
+      "passed": true
+    }
+  ]
+}

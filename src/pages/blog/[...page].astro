@@ -1,0 +1,135 @@
+---
+/**
+ * Paginated blog list page
+ * Displays all blog posts with pagination controls
+ * Routes: /blog/, /blog/2/, /blog/3/, etc.
+ * 
+ * Validates Requirements: 4.5
+ */
+
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths, Page } from 'astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+// Define the type for our blog post collection entry
+type BlogPost = Awaited<ReturnType<typeof getCollection<'blog'>>>[number];
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // Fetch all blog posts from content collection
+  const allPosts = await getCollection('blog');
+  
+  // Filter out draft posts and sort by publishDate (newest first)
+  const publishedPosts = allPosts
+    .filter(post => !post.data.draft)
+    .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+  
+  // Use paginate helper with page size of 10
+  return paginate(publishedPosts, { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+// Get the page prop from Astro
+type Props = {
+  page: Page<BlogPost>;
+};
+
+const { page } = Astro.props;
+---
+
+<PageLayout
+  title="Blog Posts"
+  description="Browse all blog posts about Machine Learning, AI Agents, Data Science, DevOps, Python, Cloud & AWS, and MLOps"
+>
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Page Header -->
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        All Blog Posts
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Explore articles about Machine Learning, AI, DevOps, and more
+      </p>
+    </header>
+
+    <!-- Posts Grid -->
+    {page.data.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {page.data.map((post) => (
+          <PostCard
+            slug={post.slug}
+            title={post.data.title}
+            description={post.data.description}
+            publishDate={post.data.publishDate}
+            tags={post.data.tags}
+            image={post.data.image}
+            featured={post.data.featured}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-gray-600 dark:text-gray-400 text-center py-8">
+        No posts available yet. Check back soon!
+      </p>
+    )}
+
+    <!-- Pagination Controls -->
+    {page.lastPage > 1 && (
+      <nav class="flex items-center justify-center gap-4 mt-12" aria-label="Pagination">
+        <!-- Previous Page Button -->
+        {page.url.prev ? (
+          <a
+            href={page.url.prev}
+            class="inline-flex items-center justify-center rounded-lg bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </a>
+        ) : (
+          <button
+            disabled
+            class="inline-flex items-center justify-center rounded-lg bg-gray-300 dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-50"
+            aria-label="Previous page (disabled)"
+          >
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </button>
+        )}
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">
+          Page {page.currentPage} of {page.lastPage}
+        </span>
+
+        <!-- Next Page Button -->
+        {page.url.next ? (
+          <a
+            href={page.url.next}
+            class="inline-flex items-center justify-center rounded-lg bg-blue-600 dark:bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            Next
+            <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ) : (
+          <button
+            disabled
+            class="inline-flex items-center justify-center rounded-lg bg-gray-300 dark:bg-gray-700 px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-50"
+            aria-label="Next page (disabled)"
+          >
+            Next
+            <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
+      </nav>
+    )}
+  </div>
+</PageLayout>

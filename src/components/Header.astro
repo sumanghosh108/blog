@@ -1,0 +1,164 @@
+---
+/**
+ * Header Component - Site navigation header
+ * Provides site branding, navigation links, theme toggle, and responsive mobile menu
+ * 
+ * Validates Requirements: 2.1, 5.4, 9.3
+ */
+
+import ThemeToggle from './ThemeToggle.astro';
+import Logo from './Logo.astro';
+import SearchBar from './SearchBar.astro';
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const navigation: NavItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Tags', href: '/tags' },
+  { label: 'About', href: '/about' },
+];
+
+// Get current path for active link highlighting
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Site Title/Logo -->
+      <div class="flex-shrink-0">
+        <Logo />
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex md:items-center md:space-x-6">
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            class={`text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+                ? 'text-blue-600 dark:text-blue-400'
+                : 'text-gray-700 dark:text-gray-300'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+        
+        <!-- Search Bar -->
+        <div class="ml-4">
+          <SearchBar />
+        </div>
+        
+        <!-- Theme Toggle -->
+        <div class="ml-2">
+          <ThemeToggle />
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="flex md:hidden">
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class="inline-flex items-center justify-center rounded-md p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <!-- Hamburger icon -->
+          <svg
+            class="block h-6 w-6"
+            id="menu-icon-open"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <!-- Close icon (hidden by default) -->
+          <svg
+            class="hidden h-6 w-6"
+            id="menu-icon-close"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Panel -->
+    <div class="hidden md:hidden" id="mobile-menu">
+      <div class="space-y-1 pb-3 pt-2">
+        <!-- Search Bar for mobile -->
+        <div class="px-3 py-2">
+          <SearchBar />
+        </div>
+        
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            class={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+        
+        <!-- Theme Toggle for mobile -->
+        <div class="px-3 py-2">
+          <ThemeToggle />
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Mobile menu toggle functionality
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIconOpen = document.getElementById('menu-icon-open');
+  const menuIconClose = document.getElementById('menu-icon-close');
+
+  if (mobileMenuButton && mobileMenu && menuIconOpen && menuIconClose) {
+    mobileMenuButton.addEventListener('click', () => {
+      const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+      
+      // Toggle menu visibility
+      mobileMenu.classList.toggle('hidden');
+      
+      // Toggle icons
+      menuIconOpen.classList.toggle('hidden');
+      menuIconClose.classList.toggle('hidden');
+      
+      // Update aria-expanded
+      mobileMenuButton.setAttribute('aria-expanded', (!isExpanded).toString());
+    });
+
+    // Close mobile menu when clicking on a link
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuIconOpen.classList.remove('hidden');
+        menuIconClose.classList.add('hidden');
+        mobileMenuButton.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>

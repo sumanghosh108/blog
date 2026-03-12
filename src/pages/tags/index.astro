@@ -1,0 +1,113 @@
+---
+/**
+ * All Tags Page - Lists all available tags with post counts
+ * Allows users to browse content by topic
+ * 
+ * Validates Requirements: 4.1, 2.5
+ */
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Fetch all blog posts
+const allPosts = await getCollection('blog');
+
+// Filter out draft posts
+const publishedPosts = allPosts.filter(post => !post.data.draft);
+
+// Extract unique tags with post counts
+const tagCounts = new Map<string, number>();
+
+publishedPosts.forEach(post => {
+  post.data.tags.forEach(tag => {
+    const count = tagCounts.get(tag) || 0;
+    tagCounts.set(tag, count + 1);
+  });
+});
+
+// Convert to array and sort by post count (descending), then alphabetically
+const sortedTags = Array.from(tagCounts.entries())
+  .sort((a, b) => {
+    // First sort by count (descending)
+    if (b[1] !== a[1]) {
+      return b[1] - a[1];
+    }
+    // Then sort alphabetically
+    return a[0].localeCompare(b[0]);
+  });
+
+// Helper function to convert tag to URL-friendly slug
+function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
+---
+
+<BaseLayout
+  title="All Tags - Suman's Blog"
+  description="Browse all topics and tags on Suman's developer blog. Find articles about Machine Learning, AI Agents, Data Science, DevOps, Python, Cloud & AWS, and MLOps."
+>
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Page Header -->
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        Browse by Topic
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        Explore all {sortedTags.length} topics covered on this blog. Click on any tag to see related posts.
+      </p>
+    </header>
+
+    <!-- Tags Grid -->
+    {sortedTags.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {sortedTags.map(([tag, count]) => (
+          <a
+            href={`/tags/${tagToSlug(tag)}`}
+            class="group relative flex flex-col items-center justify-center p-6 rounded-lg border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+          >
+            <!-- Tag Name -->
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2 text-center group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              {tag}
+            </h2>
+            
+            <!-- Post Count -->
+            <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span class="text-sm font-medium">
+                {count} {count === 1 ? 'post' : 'posts'}
+              </span>
+            </div>
+
+            <!-- Hover Arrow Indicator -->
+            <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-gray-600 dark:text-gray-400 text-lg">
+          No tags available yet. Check back soon!
+        </p>
+      </div>
+    )}
+
+    <!-- Back to Home Link -->
+    <div class="mt-12 text-center">
+      <a
+        href="/"
+        class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Home
+      </a>
+    </div>
+  </div>
+</BaseLayout>

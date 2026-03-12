@@ -1,0 +1,131 @@
+---
+/**
+ * ThemeToggle Component - Interactive theme switcher
+ * Provides a toggle button to switch between dark and light themes
+ * Persists user preference to localStorage and applies theme class to document root
+ * 
+ * Validates Requirements: 9.1, 9.2, 9.3, 9.4
+ */
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  class="inline-flex items-center justify-center rounded-lg p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+  aria-label="Toggle theme"
+  title="Toggle theme"
+>
+  <!-- Sun icon (visible in dark mode) -->
+  <svg
+    id="theme-toggle-light-icon"
+    class="hidden w-5 h-5"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    aria-hidden="true"
+  >
+    <path
+      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+    />
+  </svg>
+  
+  <!-- Moon icon (visible in light mode) -->
+  <svg
+    id="theme-toggle-dark-icon"
+    class="hidden w-5 h-5"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    aria-hidden="true"
+  >
+    <path
+      d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+    />
+  </svg>
+</button>
+
+<script>
+  // Theme management functionality
+  const THEME_KEY = 'theme';
+  const DARK_CLASS = 'dark';
+  const LIGHT_THEME = 'light';
+  const DARK_THEME = 'dark';
+
+  // Get DOM elements
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+  /**
+   * Get the current theme from localStorage or system preference
+   */
+  function getTheme(): string {
+    // Check localStorage first
+    const storedTheme = localStorage.getItem(THEME_KEY);
+    if (storedTheme === LIGHT_THEME || storedTheme === DARK_THEME) {
+      return storedTheme;
+    }
+
+    // Fall back to system preference
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return DARK_THEME;
+    }
+
+    return LIGHT_THEME;
+  }
+
+  /**
+   * Apply theme to document root and update icons
+   */
+  function applyTheme(theme: string): void {
+    const isDark = theme === DARK_THEME;
+    
+    // Apply or remove dark class on document root
+    if (isDark) {
+      document.documentElement.classList.add(DARK_CLASS);
+    } else {
+      document.documentElement.classList.remove(DARK_CLASS);
+    }
+
+    // Update icon visibility
+    if (lightIcon && darkIcon) {
+      if (isDark) {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      } else {
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+
+    // Persist to localStorage
+    localStorage.setItem(THEME_KEY, theme);
+  }
+
+  /**
+   * Toggle between light and dark themes
+   */
+  function toggleTheme(): void {
+    const currentTheme = getTheme();
+    const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+    applyTheme(newTheme);
+  }
+
+  // Initialize theme on page load
+  const initialTheme = getTheme();
+  applyTheme(initialTheme);
+
+  // Add click event listener to toggle button
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', toggleTheme);
+  }
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only update if user hasn't set a preference
+    const storedTheme = localStorage.getItem(THEME_KEY);
+    if (!storedTheme) {
+      applyTheme(e.matches ? DARK_THEME : LIGHT_THEME);
+    }
+  });
+</script>

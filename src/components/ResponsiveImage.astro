@@ -1,0 +1,61 @@
+---
+/**
+ * ResponsiveImage component with automatic format optimization
+ * 
+ * This component generates a <picture> element with multiple formats (AVIF, WebP, JPEG)
+ * and responsive sizes for optimal performance.
+ * 
+ * For images in public/: Serves pre-optimized versions (you must generate them)
+ * For images in src/assets/: Use Astro's <Image> component directly
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  width = 1200,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px',
+} = Astro.props;
+
+// Extract base path for format variants
+const basePath = src.replace(/\.[^/.]+$/, '');
+---
+
+<picture>
+  <!-- AVIF format (best compression) -->
+  <source
+    type="image/avif"
+    srcset={`${basePath}.avif`}
+    sizes={sizes}
+  />
+  
+  <!-- WebP format (good compression, wide support) -->
+  <source
+    type="image/webp"
+    srcset={`${basePath}.webp`}
+    sizes={sizes}
+  />
+  
+  <!-- Fallback to original format -->
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class={className}
+    loading={loading}
+    decoding="async"
+  />
+</picture>

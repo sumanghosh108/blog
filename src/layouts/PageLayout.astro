@@ -1,0 +1,33 @@
+---
+/**
+ * PageLayout - Layout component for static pages (About, Tags)
+ * Extends BaseLayout with a simple content wrapper and consistent styling
+ * 
+ * Validates Requirements: 5.1, 5.4
+ */
+
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const { title, description, image, canonicalURL } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  canonicalURL={canonicalURL}
+  type="website"
+>
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <article class="prose prose-lg dark:prose-invert mx-auto">
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+/**
+ * BaseLayout - Root layout component for all pages
+ * Provides HTML structure, SEO meta tags, theme initialization, and global styles
+ * 
+ * Validates Requirements: 1.1, 6.1, 6.2, 6.3, 6.6, 9.4
+ */
+
+import { generateMetaTags, generateOpenGraphTags, generateTwitterCardTags } from '../utils/seo';
+import type { SEOConfig } from '../utils/seo';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
+  publishDate?: Date;
+  tags?: string[];
+}
+
+const { 
+  title, 
+  description, 
+  image, 
+  canonicalURL, 
+  type = 'website',
+  publishDate,
+  tags 
+} = Astro.props;
+
+// Get the site URL from Astro config
+const siteURL = Astro.site?.toString() || 'https://blog.sumannaba.in';
+
+// Build canonical URL
+const canonical = canonicalURL || new URL(Astro.url.pathname, siteURL).toString();
+
+// Build full image URL if image is provided
+const fullImageURL = image ? new URL(image, siteURL).toString() : undefined;
+
+// Generate SEO meta tags
+const seoConfig: SEOConfig = {
+  title,
+  description,
+  image: fullImageURL,
+  canonicalURL: canonical,
+  type,
+  publishDate,
+  tags,
+};
+
+const metaTags = generateMetaTags(seoConfig);
+const ogTags = generateOpenGraphTags(seoConfig);
+const twitterTags = generateTwitterCardTags(seoConfig);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    
+    <title>{title}</title>
+    
+    <!-- Standard Meta Tags -->
+    {metaTags.map((tag) => (
+      <meta name={tag.name} content={tag.content} />
+    ))}
+    
+    <!-- OpenGraph Meta Tags -->
+    {ogTags.map((tag) => (
+      <meta property={tag.property} content={tag.content} />
+    ))}
+    
+    <!-- Twitter Card Meta Tags -->
+    {twitterTags.map((tag) => (
+      <meta name={tag.name} content={tag.content} />
+    ))}
+    
+    <!-- Theme Initialization Script -->
+    <!-- Runs before page render to prevent flash of unstyled content -->
+    <script is:inline>
+      // Check localStorage for saved theme preference
+      const theme = localStorage.getItem('theme');
+      
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        // No preference saved, use system preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <Header />
+    
+    <main>
+      <slot />
+    </main>
+    
+    <Footer />
+  </body>
+</html>

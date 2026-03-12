@@ -1,0 +1,44 @@
+---
+/**
+ * OptimizedImage component for automatic image optimization
+ * 
+ * For images in src/assets/: Import and pass the imported image
+ * For images in public/: Pass the path string (will use regular img tag)
+ * 
+ * Note: Images in public/ are NOT optimized by Astro. For optimization,
+ * place images in src/assets/ and import them.
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  width = 1200,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px',
+} = Astro.props;
+
+// Images in public/ folder or external URLs are served as-is
+// For optimization, images should be in src/assets/
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading={loading}
+  sizes={sizes}
+/>

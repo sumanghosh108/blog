@@ -1,0 +1,120 @@
+---
+/**
+ * About Page - Author information and expertise
+ * 
+ * Validates Requirements: 5.1, 5.2, 5.3
+ */
+
+import PageLayout from '../layouts/PageLayout.astro';
+
+const title = 'About';
+const description = 'Learn about Suman Ghosh - Machine Learning Engineer, AI Enthusiast, and Technical Writer';
+---
+
+<PageLayout title={title} description={description}>
+  <h1>About Me</h1>
+  
+  <section class="mb-8">
+    <h2>Suman Ghosh</h2>
+    <p class="text-xl text-gray-600 dark:text-gray-400">
+      Machine Learning Engineer | AI Enthusiast | Technical Writer
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2>Background</h2>
+    <p>
+      I'm a passionate technologist with a deep interest in artificial intelligence, 
+      machine learning, and cloud computing. Through this blog, I share my experiences, 
+      insights, and learnings from building real-world AI systems and deploying them at scale.
+    </p>
+    <p>
+      My journey in tech has been driven by curiosity and a desire to solve complex problems 
+      using cutting-edge technologies. I believe in learning by doing and sharing knowledge 
+      with the community.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2>Areas of Expertise</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Machine Learning</h3>
+        <p class="text-gray-700 dark:text-gray-300">Building and deploying ML models for real-world applications</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">AI Agents</h3>
+        <p class="text-gray-700 dark:text-gray-300">Developing intelligent agents and autonomous systems</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Data Science</h3>
+        <p class="text-gray-700 dark:text-gray-300">Extracting insights from data and building data pipelines</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">DevOps</h3>
+        <p class="text-gray-700 dark:text-gray-300">Automating deployments and infrastructure management</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Python</h3>
+        <p class="text-gray-700 dark:text-gray-300">Expert in Python for data science, ML, and backend development</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Cloud & AWS</h3>
+        <p class="text-gray-700 dark:text-gray-300">Designing and deploying scalable cloud solutions</p>
+      </div>
+      <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">MLOps</h3>
+        <p class="text-gray-700 dark:text-gray-300">Operationalizing ML models with CI/CD and monitoring</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2>What I Write About</h2>
+    <p>
+      On this blog, you'll find in-depth technical articles covering:
+    </p>
+    <ul>
+      <li>Machine learning model development and deployment</li>
+      <li>Building AI agents and intelligent systems</li>
+      <li>Data science techniques and best practices</li>
+      <li>DevOps automation and infrastructure as code</li>
+      <li>Python programming tips and advanced concepts</li>
+      <li>Cloud architecture and AWS services</li>
+      <li>MLOps practices for production ML systems</li>
+    </ul>
+  </section>
+
+  <section class="mb-8">
+    <h2>Get in Touch</h2>
+    <p>
+      I'm always interested in connecting with fellow developers, data scientists, and AI enthusiasts. 
+      Feel free to reach out if you'd like to discuss technology, collaborate on projects, or just chat 
+      about the latest developments in AI and machine learning.
+    </p>
+    <div class="flex gap-4 mt-4 not-prose">
+      <a 
+        href="https://github.com/sumannaba" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+      >
+        GitHub
+      </a>
+      <a 
+        href="https://linkedin.com/in/sumannaba" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        LinkedIn
+      </a>
+      <a 
+        href="mailto:contact@sumannaba.in"
+        class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+      >
+        Email
+      </a>
+    </div>
+  </section>
+</PageLayout>

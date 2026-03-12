@@ -1,0 +1,170 @@
+---
+/**
+ * Tag Filter Page - Displays all posts with a specific tag
+ * Uses dynamic routing to generate pages for each tag
+ * 
+ * Validates Requirements: 4.2, 2.5
+ */
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+// Generate static paths for all tags
+export async function getStaticPaths() {
+  // Helper function to convert tag to URL-friendly slug
+  function tagToSlug(tag: string): string {
+    return tag.toLowerCase().replace(/\s+/g, '-');
+  }
+  // Fetch all blog posts
+  const allPosts = await getCollection('blog');
+  
+  // Filter out draft posts
+  const publishedPosts = allPosts.filter(post => !post.data.draft);
+  
+  // Extract all unique tags
+  const uniqueTags = new Set<string>();
+  publishedPosts.forEach(post => {
+    post.data.tags.forEach(tag => uniqueTags.add(tag));
+  });
+  
+  // Generate a path for each tag
+  return Array.from(uniqueTags).map(tag => ({
+    params: { tag: tagToSlug(tag) },
+    props: { 
+      tag: tag,
+      tagSlug: tagToSlug(tag)
+    },
+  }));
+}
+
+// Get the tag from props
+const { tag, tagSlug } = Astro.props;
+
+// Helper function to convert tag to URL-friendly slug (for filtering)
+function tagToSlug(tag: string): string {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
+
+// Fetch all posts and filter by the selected tag
+const allPosts = await getCollection('blog');
+const filteredPosts = allPosts
+  .filter(post => {
+    // Filter out drafts and check if post has the tag (case-insensitive)
+    return !post.data.draft && post.data.tags.some(
+      postTag => tagToSlug(postTag) === tagSlug
+    );
+  })
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+// Get post count for this tag
+const postCount = filteredPosts.length;
+---
+
+<BaseLayout
+  title={`${tag} - Suman's Blog`}
+  description={`Browse all posts tagged with "${tag}". Find articles about ${tag} and related topics.`}
+>
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Page Header -->
+    <header class="mb-12">
+      <!-- Breadcrumb Navigation -->
+      <nav class="mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+          <li>
+            <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Home
+            </a>
+          </li>
+          <li>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </li>
+          <li>
+            <a href="/tags" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Tags
+            </a>
+          </li>
+          <li>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </li>
+          <li class="text-gray-900 dark:text-white font-medium" aria-current="page">
+            {tag}
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Tag Title and Count -->
+      <div class="flex items-center gap-4 mb-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+          {tag}
+        </h1>
+        <span class="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-4 py-2 text-sm font-semibold text-blue-700 dark:text-blue-400">
+          {postCount} {postCount === 1 ? 'post' : 'posts'}
+        </span>
+      </div>
+
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        All posts tagged with "{tag}"
+      </p>
+    </header>
+
+    <!-- Filtered Posts Grid -->
+    {filteredPosts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredPosts.map((post) => (
+          <PostCard
+            slug={post.slug}
+            title={post.data.title}
+            description={post.data.description}
+            publishDate={post.data.publishDate}
+            tags={post.data.tags}
+            image={post.data.image}
+            featured={post.data.featured}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-gray-600 dark:text-gray-400 text-lg mb-4">
+          No posts found with this tag.
+        </p>
+        <a
+          href="/tags"
+          class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
+        >
+          Browse all tags
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    )}
+
+    <!-- Navigation Links -->
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <a
+        href="/tags"
+        class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        All Tags
+      </a>
+      
+      <a
+        href="/"
+        class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
+      >
+        Back to Home
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</BaseLayout>

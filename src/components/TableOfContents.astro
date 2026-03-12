@@ -1,0 +1,75 @@
+---
+/**
+ * TableOfContents Component - Navigable list of blog post headings
+ * Displays a nested list of headings with anchor links for easy navigation
+ * Includes smooth scroll behavior and proper indentation for heading levels
+ * 
+ * Validates Requirements: 3.5
+ */
+
+interface Props {
+  headings: Array<{
+    depth: number;
+    text: string;
+    slug: string;
+  }>;
+}
+
+const { headings } = Astro.props;
+
+// Filter out h1 headings (typically the post title) and only show h2-h6
+const tocHeadings = headings.filter(h => h.depth > 1 && h.depth <= 6);
+
+// Don't render TOC if there are no headings
+if (tocHeadings.length === 0) {
+  return null;
+}
+
+// Calculate minimum depth for proper indentation
+const minDepth = Math.min(...tocHeadings.map(h => h.depth));
+---
+
+<nav class="table-of-contents rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6" aria-label="Table of Contents">
+  <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+    Table of Contents
+  </h2>
+  
+  <ul class="space-y-2">
+    {tocHeadings.map((heading) => {
+      // Calculate indentation level (0-based, relative to minimum depth)
+      const indentLevel = heading.depth - minDepth;
+      const paddingLeft = indentLevel * 1; // 1rem per level
+      
+      return (
+        <li
+          style={`padding-left: ${paddingLeft}rem`}
+          class="text-sm"
+        >
+          <a
+            href={`#${heading.slug}`}
+            class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 inline-block py-1"
+          >
+            {heading.text}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  /* Smooth scroll behavior for anchor links */
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+  
+  /* Add scroll margin to account for fixed headers */
+  :global([id]) {
+    scroll-margin-top: 2rem;
+  }
+  
+  /* Active link highlighting (optional enhancement) */
+  .table-of-contents a:hover {
+    text-decoration: underline;
+  }
+</style>

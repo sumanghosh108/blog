@@ -1,0 +1,183 @@
+---
+/**
+ * CodeBlock Component - Enhanced code blocks with copy functionality
+ * Provides a copy button for code blocks with visual feedback
+ * Implements client-side clipboard API for copying code
+ * 
+ * Validates Requirements: 3.7
+ * 
+ * Props:
+ * - code: string - The code content to display
+ * - lang: string (optional) - Programming language for syntax highlighting
+ * - class: string (optional) - Additional CSS classes
+ */
+
+interface Props {
+  code: string;
+  lang?: string;
+  class?: string;
+}
+
+const { code, lang = 'text', class: className = '' } = Astro.props;
+---
+
+<div class={`relative group ${className}`}>
+  <!-- Copy button -->
+  <button
+    type="button"
+    class="absolute top-2 right-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-gray-300 hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    aria-label="Copy code to clipboard"
+    data-code-block-copy
+  >
+    <!-- Copy icon (default state) -->
+    <svg
+      class="copy-icon w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+      />
+    </svg>
+    
+    <!-- Success icon (shown after copy) -->
+    <svg
+      class="success-icon hidden w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 13l4 4L19 7"
+      />
+    </svg>
+  </button>
+
+  <!-- Code block -->
+  <pre class="overflow-x-auto rounded-lg bg-gray-900 dark:bg-gray-950 p-4"><code class={`language-${lang}`} data-code-content>{code}</code></pre>
+</div>
+
+<script>
+  /**
+   * Copy to clipboard functionality for code blocks
+   * Handles copy button clicks and provides visual feedback
+   */
+  
+  // Initialize copy functionality for all code blocks
+  function initializeCodeBlocks(): void {
+    const copyButtons = document.querySelectorAll('[data-code-block-copy]');
+    
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', handleCopyClick);
+    });
+  }
+
+  /**
+   * Handle copy button click
+   */
+  async function handleCopyClick(event: Event): Promise<void> {
+    const button = event.currentTarget as HTMLButtonElement;
+    const codeBlock = button.parentElement;
+    
+    if (!codeBlock) return;
+
+    // Find the code content
+    const codeElement = codeBlock.querySelector('[data-code-content]');
+    if (!codeElement) return;
+
+    const code = codeElement.textContent || '';
+
+    try {
+      // Copy to clipboard using Clipboard API
+      await navigator.clipboard.writeText(code);
+      
+      // Show success feedback
+      showSuccessFeedback(button);
+    } catch (err) {
+      // Fallback for older browsers or if clipboard API fails
+      fallbackCopyToClipboard(code, button);
+    }
+  }
+
+  /**
+   * Show success feedback by swapping icons
+   */
+  function showSuccessFeedback(button: HTMLButtonElement): void {
+    const copyIcon = button.querySelector('.copy-icon');
+    const successIcon = button.querySelector('.success-icon');
+    
+    if (!copyIcon || !successIcon) return;
+
+    // Hide copy icon, show success icon
+    copyIcon.classList.add('hidden');
+    successIcon.classList.remove('hidden');
+    
+    // Update aria-label for accessibility
+    button.setAttribute('aria-label', 'Code copied to clipboard');
+
+    // Reset after 2 seconds
+    setTimeout(() => {
+      copyIcon.classList.remove('hidden');
+      successIcon.classList.add('hidden');
+      button.setAttribute('aria-label', 'Copy code to clipboard');
+    }, 2000);
+  }
+
+  /**
+   * Fallback copy method for browsers without Clipboard API
+   */
+  function fallbackCopyToClipboard(text: string, button: HTMLButtonElement): void {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      showSuccessFeedback(button);
+    } catch (err) {
+      console.error('Failed to copy code:', err);
+    }
+    
+    document.body.removeChild(textArea);
+  }
+
+  // Initialize on page load
+  initializeCodeBlocks();
+
+  // Re-initialize after page navigation (for SPA-like behavior)
+  document.addEventListener('astro:page-load', initializeCodeBlocks);
+</script>
+
+<style>
+  /* Ensure code blocks have proper styling */
+  pre {
+    margin: 0;
+  }
+  
+  code {
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #e5e7eb;
+  }
+
+  /* Smooth transitions for button visibility */
+  button[data-code-block-copy] {
+    transition: opacity 0.2s ease-in-out;
+  }
+</style>
