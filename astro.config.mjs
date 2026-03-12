@@ -4,8 +4,8 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sumanghosh108.github.io',
-  base: '/blog/',
+  site: 'https://blog.sumannaba.in',
+  base: '/',
   output: 'static',
   integrations: [
     tailwind(),
