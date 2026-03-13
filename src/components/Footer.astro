@@ -11,8 +11,63 @@ const authorName = "Suman Ghosh";
 ---
 
 <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col items-center space-y-4">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Footer Navigation Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+      <!-- Products Column -->
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Products</h3>
+        <ul class="space-y-3">
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Machine Learning</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">AI</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Database</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Analytics</a></li>
+        </ul>
+      </div>
+
+      <!-- Solutions Column -->
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Solutions</h3>
+        <ul class="space-y-3">
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Machine Learning</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">AI</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Database</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Analytics</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources Column -->
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Resources</h3>
+        <ul class="space-y-3">
+          <li><a href={`${import.meta.env.BASE_URL}blog/`} class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Blog</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Integrations</a></li>
+        </ul>
+      </div>
+
+      <!-- About Column -->
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">About</h3>
+        <ul class="space-y-3">
+          <li><a href={`${import.meta.env.BASE_URL}about/`} class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Connect</a></li>
+        </ul>
+      </div>
+
+      <!-- Get started Column -->
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Get started</h3>
+        <ul class="space-y-3">
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Pricing</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Free Trial</a></li>
+          <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Request a demo</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-200 dark:border-gray-800 pt-8">
+      <div class="flex flex-col items-center space-y-4">
       <!-- Social Links -->
       <div class="flex items-center space-x-6">
         <!-- GitHub -->
